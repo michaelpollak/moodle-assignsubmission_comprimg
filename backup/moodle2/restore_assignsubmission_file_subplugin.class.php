@@ -17,9 +17,9 @@
 /**
  * This file contains the class for restore of this submission plugin
  *
- * @package assignsubmission_comprimg
- * @copyright 2012 NetSpot {@link http://www.netspot.com.au}
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     assignsubmission_comprimg
+ * @copyright   2021 michael pollak <moodle@michaelpollak.org>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 /**
@@ -28,9 +28,9 @@
  * Provides the necessary information
  * needed to restore one assign_submission subplugin.
  *
- * @package assignsubmission_comprimg
- * @copyright 2012 NetSpot {@link http://www.netspot.com.au}
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     assignsubmission_comprimg
+ * @copyright   2021 michael pollak <moodle@michaelpollak.org>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_assignsubmission_comprimg_subplugin extends restore_subplugin {
 
@@ -43,7 +43,7 @@ class restore_assignsubmission_comprimg_subplugin extends restore_subplugin {
         $paths = array();
 
         $elename = $this->get_namefor('submission');
-        $elepath = $this->get_pathfor('/submission_file');
+        $elepath = $this->get_pathfor('/submission_comprimg');
         // We used get_recommended_name() so this works.
         $paths[] = new restore_path_element($elename, $elepath);
 
@@ -51,7 +51,7 @@ class restore_assignsubmission_comprimg_subplugin extends restore_subplugin {
     }
 
     /**
-     * Processes one submission_file element
+     * Processes one submission_comprimg element
      * @param mixed $data
      * @return void
      */
@@ -68,7 +68,7 @@ class restore_assignsubmission_comprimg_subplugin extends restore_subplugin {
         $DB->insert_record('assignsubmission_comprimg', $data);
 
         $this->add_related_files('assignsubmission_comprimg',
-                                 'submission_files',
+                                 'submission_comprimg',
                                  'submission',
                                  null,
                                  $oldsubmissionid);

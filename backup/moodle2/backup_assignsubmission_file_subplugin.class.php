@@ -17,9 +17,9 @@
 /**
  * This file contains the class for backup of this submission plugin
  *
- * @package assignsubmission_comprimg
- * @copyright 2012 NetSpot {@link http://www.netspot.com.au}
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     assignsubmission_comprimg
+ * @copyright   2021 michael pollak <moodle@michaelpollak.org>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -29,9 +29,9 @@ defined('MOODLE_INTERNAL') || die();
  *
  * This just adds its filearea to the annotations and records the number of files
  *
- * @package assignsubmission_comprimg
- * @copyright 2012 NetSpot {@link http://www.netspot.com.au}
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     assignsubmission_comprimg
+ * @copyright   2021 michael pollak <moodle@michaelpollak.org>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class backup_assignsubmission_comprimg_subplugin extends backup_subplugin {
 
@@ -44,7 +44,7 @@ class backup_assignsubmission_comprimg_subplugin extends backup_subplugin {
         // Create XML elements.
         $subplugin = $this->get_subplugin_element();
         $subpluginwrapper = new backup_nested_element($this->get_recommended_name());
-        $subpluginelement = new backup_nested_element('submission_file',
+        $subpluginelement = new backup_nested_element('submission_comprimg',
                                                       null,
                                                       array('numfiles', 'submission'));
 
@@ -58,7 +58,7 @@ class backup_assignsubmission_comprimg_subplugin extends backup_subplugin {
 
         // The parent is the submission.
         $subpluginelement->annotate_files('assignsubmission_comprimg',
-                                          'submission_files',
+                                          'submission_comprimg',
                                           'submission');
         return $subplugin;
     }
