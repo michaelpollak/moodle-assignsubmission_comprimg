@@ -44,7 +44,7 @@ class assign_submission_comprimg extends assign_submission_plugin {
      * @return string
      */
     public function get_name() {
-        return get_string('file', 'assignsubmission_comprimg');
+        return get_string('comprimg', 'assignsubmission_comprimg');
     }
 
     /**
@@ -537,9 +537,7 @@ class assign_submission_comprimg extends assign_submission_plugin {
      */
     public function format_for_log(stdClass $submission) {
         // Format the info for each submission plugin (will be added to log).
-        $filecount = $this->count_files($submission->id, assignsubmission_comprimg_FILEAREA);
-
-        return get_string('numfilesforlog', 'assignsubmission_comprimg', $filecount);
+        return get_string('comprimgforlog', 'assignsubmission_comprimg');
     }
 
     /**
