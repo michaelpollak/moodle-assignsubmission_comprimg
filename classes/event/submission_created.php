@@ -17,9 +17,9 @@
 /**
  * The assignsubmission_comprimg submission_created event.
  *
- * @package    assignsubmission_comprimg
- * @copyright  2014 Adrian Greeve <adrian@moodle.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     assignsubmission_comprimg
+ * @copyright   2021 michael pollak <moodle@michaelpollak.org>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace assignsubmission_comprimg\event;
@@ -29,16 +29,9 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * The assignsubmission_comprimg submission_created event class.
  *
- * @property-read array $other {
- *      Extra information about the event.
- *
- *      - int filesubmissioncount: The number of files uploaded.
- * }
- *
- * @package    assignsubmission_comprimg
- * @since      Moodle 2.7
- * @copyright  2014 Adrian Greeve <adrian@moodle.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     assignsubmission_comprimg
+ * @copyright   2021 michael pollak <moodle@michaelpollak.org>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class submission_created extends \mod_assign\event\submission_created {
 
@@ -56,29 +49,10 @@ class submission_created extends \mod_assign\event\submission_created {
      * @return string
      */
     public function get_description() {
-        $descriptionstring = "The user with id '$this->userid' created a file submission and uploaded " .
-            "'{$this->other['filesubmissioncount']}' file/s in the assignment with course module id " .
-            "'$this->contextinstanceid'";
-        if (!empty($this->other['groupid'])) {
-            $descriptionstring .= " for the group with id '{$this->other['groupid']}'.";
-        } else {
-            $descriptionstring .= ".";
-        }
+        $descriptionstring = "The user with id '$this->userid' created a compressed image submission and uploaded a file in the assignment with course module id " .
+            "'$this->contextinstanceid'.";
 
         return $descriptionstring;
-    }
-
-    /**
-     * Custom validation.
-     *
-     * @throws \coding_exception
-     * @return void
-     */
-    protected function validate_data() {
-        parent::validate_data();
-        if (!isset($this->other['filesubmissioncount'])) {
-            throw new \coding_exception('The \'filesubmissioncount\' value must be set in other.');
-        }
     }
 
     public static function get_objectid_mapping() {
