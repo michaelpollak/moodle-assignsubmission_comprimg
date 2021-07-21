@@ -17,9 +17,9 @@
 /**
  * Privacy class for requesting user data.
  *
- * @package    assignsubmission_comprimg
- * @copyright  2018 Adrian Greeve <adrian@moodle.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     assignsubmission_comprimg
+ * @copyright   2021 michael pollak <moodle@michaelpollak.org>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace assignsubmission_comprimg\privacy;
@@ -36,9 +36,9 @@ use \mod_assign\privacy\assign_plugin_request_data;
 /**
  * Privacy class for requesting user data.
  *
- * @package    assignsubmission_comprimg
- * @copyright  2018 Adrian Greeve <adrian@moodle.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     assignsubmission_comprimg
+ * @copyright   2021 michael pollak <moodle@michaelpollak.org>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements
         \core_privacy\local\metadata\provider,
@@ -52,7 +52,7 @@ class provider implements
      * @return collection Return the collection after adding to it.
      */
     public static function get_metadata(collection $collection) : collection {
-        $collection->link_subsystem('core_files', 'privacy:metadata:filepurpose');
+        $collection->link_subsystem('core_files', 'privacy:metadata:comprimgpurpose');
         return $collection;
     }
 
@@ -99,7 +99,7 @@ class provider implements
         }
         $user = new \stdClass();
         $assign = $exportdata->get_assign();
-        $plugin = $assign->get_plugin_by_type('assignsubmission', 'file');
+        $plugin = $assign->get_plugin_by_type('assignsubmission', 'comprimg');
         $files = $plugin->get_files($exportdata->get_pluginobject(), $user);
         foreach ($files as $file) {
             $userid = $exportdata->get_pluginobject()->userid;
