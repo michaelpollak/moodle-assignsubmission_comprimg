@@ -19,9 +19,9 @@
  *
  * This class provides all the functionality for the new assign module.
  *
- * @package assignsubmission_comprimg
- * @copyright 2012 NetSpot {@link http://www.netspot.com.au}
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     assignsubmission_comprimg
+ * @copyright   2021 michael pollak <moodle@michaelpollak.org>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -67,56 +67,58 @@ class assign_submission_comprimg extends assign_submission_plugin {
     public function get_settings(MoodleQuickForm $mform) {
         global $CFG, $COURSE;
 
+        // Teachers view.
+        // Get admin configuration.
+        $adminconf = get_config('assignsubmission_comprimg');
+        
+        // Check if we already have an instance to work with.
         if ($this->assignment->has_instance()) {
-            $defaultmaxfilesubmissions = $this->get_config('maxfilesubmissions');
-            $defaultmaxsubmissionsizebytes = $this->get_config('maxsubmissionsizebytes');
-            $defaultfiletypes = $this->get_config('filetypeslist');
+            $defaultmaxheight = $this->get_config('maxheight');
+            $defaultmaxwidth = $this->get_config('maxwidth');
+            $defaultmaxfilesize = $this->get_config('maxfilesize');
+            $defaultnoforce = $this->get_config('noforce');
         } else {
-            $defaultmaxfilesubmissions = get_config('assignsubmission_comprimg', 'maxfiles');
-            $defaultmaxsubmissionsizebytes = get_config('assignsubmission_comprimg', 'maxbytes');
-            $defaultfiletypes = get_config('assignsubmission_comprimg', 'filetypes');
-        }
-        $defaultfiletypes = (string)$defaultfiletypes;
-
-        $settings = array();
-        $options = array();
-        for ($i = 1; $i <= get_config('assignsubmission_comprimg', 'maxfiles'); $i++) {
-            $options[$i] = $i;
+            $defaultmaxheight = $adminconf->maxheight;
+            $defaultmaxwidth = $adminconf->maxwidth;
+            $defaultmaxfilesize = $adminconf->maxfilesize;
+            $defaultnoforce = 0;
         }
 
-        $name = get_string('maxfilessubmission', 'assignsubmission_comprimg');
-        $mform->addElement('select', 'assignsubmission_comprimg_maxfiles', $name, $options);
-        $mform->addHelpButton('assignsubmission_comprimg_maxfiles',
-                              'maxfilessubmission',
-                              'assignsubmission_comprimg');
-        $mform->setDefault('assignsubmission_comprimg_maxfiles', $defaultmaxfilesubmissions);
-        $mform->hideIf('assignsubmission_comprimg_maxfiles', 'assignsubmission_comprimg_enabled', 'notchecked');
+        // If teachers are allowed to change maxwidth, show UI.
+        if(!$adminconf->forcemaxwidth) {
+            $mform->addElement('text', 'assignsubmission_comprimg_maxwidth', get_string('maxwidth', 'assignsubmission_comprimg'));
+            $mform->setType('assignsubmission_comprimg_maxwidth', PARAM_INT);
+            $mform->setDefault('assignsubmission_comprimg_maxwidth', $defaultmaxwidth);
+            $mform->addHelpButton('assignsubmission_comprimg_maxwidth', 'maxwidth', 'assignsubmission_comprimg');
+            $mform->hideIf('assignsubmission_comprimg_maxwidth', 'assignsubmission_comprimg_enabled', 'notchecked');
+        }
+                
+        // If teachers are allowed to change maxheight, show UI.
+        if(!$adminconf->forcemaxheight) {
+            $mform->addElement('text', 'assignsubmission_comprimg_maxheight', get_string('maxheight', 'assignsubmission_comprimg'));
+            $mform->setType('assignsubmission_comprimg_maxheight', PARAM_INT);
+            $mform->setDefault('assignsubmission_comprimg_maxheight', $defaultmaxheight);
+            $mform->addHelpButton('assignsubmission_comprimg_maxheight', 'maxheight', 'assignsubmission_comprimg');
+            $mform->hideIf('assignsubmission_comprimg_maxheight', 'assignsubmission_comprimg_enabled', 'notchecked');
+        }
 
-        $choices = get_max_upload_sizes($CFG->maxbytes,
-                                        $COURSE->maxbytes,
-                                        get_config('assignsubmission_comprimg', 'maxbytes'));
-
-        $settings[] = array('type' => 'select',
-                            'name' => 'maxsubmissionsizebytes',
-                            'description' => get_string('maximumsubmissionsize', 'assignsubmission_comprimg'),
-                            'options'=> $choices,
-                            'default'=> $defaultmaxsubmissionsizebytes);
-
-        $name = get_string('maximumsubmissionsize', 'assignsubmission_comprimg');
-        $mform->addElement('select', 'assignsubmission_comprimg_maxsizebytes', $name, $choices);
-        $mform->addHelpButton('assignsubmission_comprimg_maxsizebytes',
-                              'maximumsubmissionsize',
-                              'assignsubmission_comprimg');
-        $mform->setDefault('assignsubmission_comprimg_maxsizebytes', $defaultmaxsubmissionsizebytes);
-        $mform->hideIf('assignsubmission_comprimg_maxsizebytes',
-                           'assignsubmission_comprimg_enabled',
-                           'notchecked');
-
-        $name = get_string('acceptedfiletypes', 'assignsubmission_comprimg');
-        $mform->addElement('filetypes', 'assignsubmission_comprimg_filetypes', $name);
-        $mform->addHelpButton('assignsubmission_comprimg_filetypes', 'acceptedfiletypes', 'assignsubmission_comprimg');
-        $mform->setDefault('assignsubmission_comprimg_filetypes', $defaultfiletypes);
-        $mform->hideIf('assignsubmission_comprimg_filetypes', 'assignsubmission_comprimg_enabled', 'notchecked');
+        // If teachers are allowed to change maxfilesize, show UI.
+        if(!$adminconf->forcemaxfilesize) {
+            $choices = get_max_upload_sizes($CFG->maxbytes, $COURSE->maxbytes);
+            $mform->addElement('select', 'assignsubmission_comprimg_maxfilesize', get_string('maxfilesize', 'assignsubmission_comprimg'), $choices);
+            $mform->addHelpButton('assignsubmission_comprimg_maxfilesize', 'maxfilesize', 'assignsubmission_comprimg');
+            $mform->setDefault('assignsubmission_comprimg_maxfilesize', $defaultmaxfilesize);
+            $mform->hideIf('assignsubmission_comprimg_maxfilesize', 'assignsubmission_comprimg_enabled', 'notchecked');                   
+        }
+        
+        if(true) {
+            $mform->addElement('advcheckbox', 'assignsubmission_comprimg_noforce', "Don't force requirements", 'Students are allowed to overrule the requirements.');
+            $mform->setType('assignsubmission_comprimg_noforce', PARAM_INT);
+            $mform->addHelpButton('assignsubmission_comprimg_maxfilesize', 'maxfilesize', 'assignsubmission_comprimg');
+            $mform->setDefault('assignsubmission_comprimg_noforce', $defaultnoforce);
+            $mform->hideIf('assignsubmission_comprimg_noforce', 'assignsubmission_comprimg_enabled', 'notchecked');
+        }
+    
     }
 
     /**
@@ -126,15 +128,23 @@ class assign_submission_comprimg extends assign_submission_plugin {
      * @return bool
      */
     public function save_settings(stdClass $data) {
-        $this->set_config('maxfilesubmissions', $data->assignsubmission_comprimg_maxfiles);
-        $this->set_config('maxsubmissionsizebytes', $data->assignsubmission_comprimg_maxsizebytes);
-
-        if (!empty($data->assignsubmission_comprimg_filetypes)) {
-            $this->set_config('filetypeslist', $data->assignsubmission_comprimg_filetypes);
-        } else {
-            $this->set_config('filetypeslist', '');
+        
+        // Store teachers settings if applicable.
+        if (isset($data->assignsubmission_comprimg_maxwidth)) {
+            $this->set_config('maxwidth', $data->assignsubmission_comprimg_maxwidth);
         }
-
+        if (isset($data->assignsubmission_comprimg_maxheight)) {
+            $this->set_config('maxheight', $data->assignsubmission_comprimg_maxheight);
+        }
+        if (isset($data->assignsubmission_comprimg_maxfilesize)) {
+            $this->set_config('maxfilesize', $data->assignsubmission_comprimg_maxfilesize);
+        }
+        
+        // Allow override by students.
+        if (isset($data->assignsubmission_comprimg_noforce)) {
+            $this->set_config('noforce', $data->assignsubmission_comprimg_noforce);
+        }
+        
         return true;
     }
 
@@ -144,15 +154,37 @@ class assign_submission_comprimg extends assign_submission_plugin {
      * @return array
      */
     private function get_file_options() {
+        
+        
+        // Add our new checks here.
+        // Set global default
+        // If set, set instance default by admin
+        // If set, set teachers default.
+        
+        // NOTE: Filepicker ignores maxbytes when used with admin rights.
+        $maxfilesize = 0;
+        
+        $adminconfig = get_config('assignsubmission_comprimg');
+
+        // If admin allows for teachers to overwrite look for teachers.
+        if (!$adminconfig->forcemaxfilesize) {
+
+            // If teachers allow students to override set to moodle max.
+            if ($this->get_config('noforce') == 1) {
+                $maxfilesize = get_max_upload_file_size();
+            } else {
+                $maxfilesize = $this->get_config('maxfilesize');
+            }
+        } else {
+            $maxfilesize = $adminconfig->$maxfilesize;
+        }
+
         $fileoptions = array('subdirs' => 1,
-                                'maxbytes' => $this->get_config('maxsubmissionsizebytes'),
-                                'maxfiles' => $this->get_config('maxfilesubmissions'),
+                                'maxbytes' => $maxfilesize,
+                                'maxfiles' => 1,
                                 'accepted_types' => $this->get_configured_typesets(),
                                 'return_types' => (FILE_INTERNAL | FILE_CONTROLLED_LINK));
-        if ($fileoptions['maxbytes'] == 0) {
-            // Use module default.
-            $fileoptions['maxbytes'] = get_config('assignsubmission_comprimg', 'maxbytes');
-        }
+        
         return $fileoptions;
     }
 
@@ -172,6 +204,7 @@ class assign_submission_comprimg extends assign_submission_plugin {
         }
 
         $fileoptions = $this->get_file_options();
+
         $submissionid = $submission ? $submission->id : 0;
 
         $data = file_prepare_standard_filemanager($data,
@@ -183,7 +216,11 @@ class assign_submission_comprimg extends assign_submission_plugin {
                                                   $submissionid);
         $mform->addElement('filemanager', 'files_filemanager', $this->get_name(), null, $fileoptions);
 
-        return true;
+        // Student override.
+        // TODO: Hide until teacher allows.
+        if (true) {
+            $mform->addElement('advcheckbox', 'studentoverride', '', get_string('studentoverride', 'assignsubmission_comprimg'));
+        }
     }
 
     /**
@@ -237,6 +274,91 @@ class assign_submission_comprimg extends assign_submission_plugin {
                                      $submission->id,
                                      'id',
                                      false);
+
+        // Check if the files are okay.
+        $adminconf = get_config('assignsubmission_comprimg');
+        $teacherconf = $this->get_config();
+        
+        $maxfilesize = $adminconf->maxfilesize;
+        if (!$adminconf->forcemaxfilesize AND isset($teacherconf->maxfilesize)) {
+            $maxfilesize = $teacherconf->maxfilesize;
+        }
+        
+        $maxwidth = $adminconf->maxwidth;
+        if (!$adminconf->forcemaxwidth AND isset($teacherconf->maxwidth)) {
+            $maxwidth = $teacherconf->maxwidth;
+        }
+
+        $maxheight = $adminconf->maxheight;
+        if (!$adminconf->forcemaxheight AND isset($teacherconf->maxheight)) {
+            $maxheight = $teacherconf->maxheight;
+        }
+        
+        $steps = 1; // How many compressiongrades do we degrade with every try?
+        $newwidth = $maxwidth;
+        $newheight = $maxheight;
+        $keepaspectratio=true;
+
+        // Override compression stuff if student chooses to.
+        if ($data->studentoverride) {
+            return true;
+        }
+
+        foreach ($files as $file) {
+            
+            $filename = $file->get_filename();
+            // https://stackoverflow.com/questions/24872013/php-compress-image-to-meet-file-size-limit
+        
+            // Correct width and height first, according to the settings.
+            if (isset($maxwidth) OR isset($maxheight)) {
+                $file_record = array('contextid'=>$file->get_contextid(), 'component'=>$file->get_component(), 'filearea'=>$file->get_filearea(),
+                    'itemid'=>$file->get_itemid(), 'filepath'=>$file->get_filepath(),
+                    'filename'=>'zugeschnitten_'.$filename, 'userid'=>$file->get_userid());
+
+                try {
+                    $newfile = $fs->convert_image($file_record, $file, $newwidth, $newheight, $keepaspectratio, null);
+                    $file->delete();
+                    $file = $newfile;
+                } catch (Exception $e) {
+                    debugging($e->getMessage());
+                    $this->set_error(get_string('errorwidthheight', 'assignsubmission_comprimg'));
+                    return false;
+                }
+            }
+            
+            // Work to get the file sizes under control, try until we get lucky.
+            $compressiongrade = 8;
+            while ($file->get_filesize() > $maxfilesize) {
+                $file_record = array('contextid'=>$file->get_contextid(), 'component'=>$file->get_component(), 'filearea'=>$file->get_filearea(),
+                    'itemid'=>$file->get_itemid(), 'filepath'=>$file->get_filepath(),
+                    'filename'=>'komprimiert_'.$compressiongrade.'_'.$filename, 'userid'=>$file->get_userid());
+
+                try {
+                    // Try to fix them by autocompression and replacing them.
+                    $newfile = $fs->convert_image($file_record, $file, null, null, true, $compressiongrade);
+                    $file->delete();
+                    $file = $newfile;
+                                
+                } catch (Exception $e) {
+                    debugging($e->getMessage());
+                    $this->set_error(get_string('errorcompression', 'assignsubmission_comprimg'));
+                    return false;
+                }            
+                
+                $compressiongrade = $compressiongrade - $steps;
+                if ($compressiongrade <= 1) {
+                    break;
+                }
+                
+            }
+
+            // Return feedback after final tries were not successful.
+            if ($newfile->get_filesize() > $maxfilesize) {
+                $this->set_error(get_string('errormaxsize', 'assignsubmission_comprimg'));
+                return false;
+            }  
+
+        }
 
         $count = $this->count_files($submission->id, assignsubmission_comprimg_FILEAREA);
 
@@ -393,108 +515,6 @@ class assign_submission_comprimg extends assign_submission_plugin {
                                                     $submission->id);
     }
 
-
-
-    /**
-     * Return true if this plugin can upgrade an old Moodle 2.2 assignment of this type
-     * and version.
-     *
-     * @param string $type
-     * @param int $version
-     * @return bool True if upgrade is possible
-     */
-    public function can_upgrade($type, $version) {
-
-        $uploadsingletype ='uploadsingle';
-        $uploadtype ='upload';
-
-        if (($type == $uploadsingletype || $type == $uploadtype) && $version >= 2011112900) {
-            return true;
-        }
-        return false;
-    }
-
-
-    /**
-     * Upgrade the settings from the old assignment
-     * to the new plugin based one
-     *
-     * @param context $oldcontext - the old assignment context
-     * @param stdClass $oldassignment - the old assignment data record
-     * @param string $log record log events here
-     * @return bool Was it a success? (false will trigger rollback)
-     */
-    public function upgrade_settings(context $oldcontext, stdClass $oldassignment, & $log) {
-        global $DB;
-
-        if ($oldassignment->assignmenttype == 'uploadsingle') {
-            $this->set_config('maxfilesubmissions', 1);
-            $this->set_config('maxsubmissionsizebytes', $oldassignment->maxbytes);
-            return true;
-        } else if ($oldassignment->assignmenttype == 'upload') {
-            $this->set_config('maxfilesubmissions', $oldassignment->var1);
-            $this->set_config('maxsubmissionsizebytes', $oldassignment->maxbytes);
-
-            // Advanced file upload uses a different setting to do the same thing.
-            $DB->set_field('assign',
-                           'submissiondrafts',
-                           $oldassignment->var4,
-                           array('id'=>$this->assignment->get_instance()->id));
-
-            // Convert advanced file upload "hide description before due date" setting.
-            $alwaysshow = 0;
-            if (!$oldassignment->var3) {
-                $alwaysshow = 1;
-            }
-            $DB->set_field('assign',
-                           'alwaysshowdescription',
-                           $alwaysshow,
-                           array('id'=>$this->assignment->get_instance()->id));
-            return true;
-        }
-    }
-
-    /**
-     * Upgrade the submission from the old assignment to the new one
-     *
-     * @param context $oldcontext The context of the old assignment
-     * @param stdClass $oldassignment The data record for the old oldassignment
-     * @param stdClass $oldsubmission The data record for the old submission
-     * @param stdClass $submission The data record for the new submission
-     * @param string $log Record upgrade messages in the log
-     * @return bool true or false - false will trigger a rollback
-     */
-    public function upgrade(context $oldcontext,
-                            stdClass $oldassignment,
-                            stdClass $oldsubmission,
-                            stdClass $submission,
-                            & $log) {
-        global $DB;
-
-        $filesubmission = new stdClass();
-
-        $filesubmission->numfiles = $oldsubmission->numfiles;
-        $filesubmission->submission = $submission->id;
-        $filesubmission->assignment = $this->assignment->get_instance()->id;
-
-        if (!$DB->insert_record('assignsubmission_comprimg', $filesubmission) > 0) {
-            $log .= get_string('couldnotconvertsubmission', 'mod_assign', $submission->userid);
-            return false;
-        }
-
-        // Now copy the area files.
-        $this->assignment->copy_area_files_for_upgrade($oldcontext->id,
-                                                        'mod_assignment',
-                                                        'submission',
-                                                        $oldsubmission->id,
-                                                        $this->assignment->get_context()->id,
-                                                        'assignsubmission_comprimg',
-                                                        assignsubmission_comprimg_FILEAREA,
-                                                        $submission->id);
-
-        return true;
-    }
-
     /**
      * The assignment has been deleted - cleanup
      *
@@ -632,7 +652,7 @@ class assign_submission_comprimg extends assign_submission_plugin {
      * @return array('groupname', 'mime/type', ...)
      */
     private function get_configured_typesets() {
-        $typeslist = (string)$this->get_config('filetypeslist');
+        $typeslist = 'optimised_image';
 
         $util = new \core_form\filetypes_util();
         $sets = $util->normalize_file_types($typeslist);

@@ -17,35 +17,48 @@
 /**
  * This file defines the admin settings for this plugin
  *
- * @package   assignsubmission_comprimg
- * @copyright 2012 NetSpot {@link http://www.netspot.com.au}
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     assignsubmission_comprimg
+ * @copyright   2021 michael pollak <moodle@michaelpollak.org>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 
 // Note: This is on by default.
 $settings->add(new admin_setting_configcheckbox('assignsubmission_comprimg/default',
-                   new lang_string('default', 'assignsubmission_comprimg'),
-                   new lang_string('default_help', 'assignsubmission_comprimg'), 1));
+                new lang_string('default', 'assignsubmission_comprimg'),
+                new lang_string('default_help', 'assignsubmission_comprimg'), 1));
 
-$settings->add(new admin_setting_configtext('assignsubmission_comprimg/maxfiles',
-                   new lang_string('maxfiles', 'assignsubmission_comprimg'),
-                   new lang_string('maxfiles_help', 'assignsubmission_comprimg'), 20, PARAM_INT));
+// Maxwidth in pixels.
+$settings->add(new admin_setting_configtext('assignsubmission_comprimg/maxwidth',
+                new lang_string('maxwidth', 'assignsubmission_comprimg'),
+                new lang_string('maxwidth_help', 'assignsubmission_comprimg'), 1024, PARAM_INT));
 
-$settings->add(new admin_setting_filetypes('assignsubmission_comprimg/filetypes',
-                   new lang_string('defaultacceptedfiletypes', 'assignsubmission_comprimg'),
-                   new lang_string('acceptedfiletypes_help', 'assignsubmission_comprimg'), ''));
+// Allow teachers to overrule maxwidth.
+$settings->add(new admin_setting_configcheckbox('assignsubmission_comprimg/forcemaxwidth',
+                new lang_string('forcemaxwidth', 'assignsubmission_comprimg'),
+                new lang_string('forcemaxwidth_help', 'assignsubmission_comprimg'), 0));
 
-if (isset($CFG->maxbytes)) {
+// Maxheight in pixels.
+$settings->add(new admin_setting_configtext('assignsubmission_comprimg/maxheight',
+                new lang_string('maxheight', 'assignsubmission_comprimg'),
+                new lang_string('maxheight_help', 'assignsubmission_comprimg'), 1024, PARAM_INT));
 
-    $name = new lang_string('maximumsubmissionsize', 'assignsubmission_comprimg');
-    $description = new lang_string('configmaxbytes', 'assignsubmission_comprimg');
+// Allow teachers to overrule maxwidth.
+$settings->add(new admin_setting_configcheckbox('assignsubmission_comprimg/forcemaxheight',
+                new lang_string('forcemaxheight', 'assignsubmission_comprimg'),
+                new lang_string('forcemaxheight_help', 'assignsubmission_comprimg'), 0));
 
-    $maxbytes = get_config('assignsubmission_comprimg', 'maxbytes');
-    $element = new admin_setting_configselect('assignsubmission_comprimg/maxbytes',
-                                              $name,
-                                              $description,
-                                              $CFG->maxbytes,
-                                              get_max_upload_sizes($CFG->maxbytes, 0, 0, $maxbytes));
-    $settings->add($element);
-}
+// Maxfilesize in megabyte.
+$name = new lang_string('maxfilesize', 'assignsubmission_comprimg');
+$description = new lang_string('maxfilesize_help', 'assignsubmission_comprimg');
+
+$element = new admin_setting_configtext('assignsubmission_comprimg/maxfilesize',
+                $name, $description, 2, PARAM_INT);
+$settings->add($element);
+
+// Allow teachers to overrule maxfilesize.
+$settings->add(new admin_setting_configcheckbox('assignsubmission_comprimg/forcemaxfilesize',
+                new lang_string('forcemaxfilesize', 'assignsubmission_comprimg'),
+                new lang_string('forcemaxfilesize_help', 'assignsubmission_comprimg'), 0));
+
+                
