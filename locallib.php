@@ -175,7 +175,7 @@ class assign_submission_comprimg extends assign_submission_plugin {
                 $maxfilesize = $this->get_config('maxfilesize');
             }
         } else {
-            $maxfilesize = $adminconfig->$maxfilesize;
+            $maxfilesize = $adminconfig->maxfilesize;
         }
 
         $fileoptions = array('subdirs' => 1,
@@ -298,8 +298,8 @@ class assign_submission_comprimg extends assign_submission_plugin {
             return true;
         }
         
-        $prefixscaled = get_string('$prefixscaled', 'assignsubmission_comprimg'); //'zugeschnitten_';
-        $prefixcomp = get_string('$prefixcomp', 'assignsubmission_comprimg');
+        $prefixscaled = get_string('prefixscaled', 'assignsubmission_comprimg'); //'zugeschnitten_';
+        $prefixcomp = get_string('prefixcomp', 'assignsubmission_comprimg');
 
         foreach ($files as $file) {
             
