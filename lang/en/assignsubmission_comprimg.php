@@ -45,6 +45,10 @@ $string['maxfilesize_help'] = 'Larger uploaded images will be compressed to this
 $string['forcemaxfilesize'] = 'Force maximum file size';
 $string['forcemaxfilesize_help'] = 'If selected teachers cannot overrule the maximal file size of images.';
 $string['studentoverride'] = 'I want to upload this file despite not meeting the criteria.';
+$string['noforce'] = "Don't force requirements";
+$string['noforce_postfix'] = 'Students are allowed to overrule the requirements.';
+$string['prefixscaled'] = "scaled_";
+$string['prefixcomp'] = "compressed_";
 
 // Privacy API
 $string['privacy:metadata:comprimgpurpose'] = 'The images uploaded for this assignment submission';

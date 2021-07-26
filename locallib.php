@@ -112,9 +112,8 @@ class assign_submission_comprimg extends assign_submission_plugin {
         }
         
         if(true) {
-            $mform->addElement('advcheckbox', 'assignsubmission_comprimg_noforce', "Don't force requirements", 'Students are allowed to overrule the requirements.');
+            $mform->addElement('advcheckbox', 'assignsubmission_comprimg_noforce', get_string('noforce', 'assignsubmission_comprimg'), get_string('noforce_postfix', 'assignsubmission_comprimg'));
             $mform->setType('assignsubmission_comprimg_noforce', PARAM_INT);
-            $mform->addHelpButton('assignsubmission_comprimg_maxfilesize', 'maxfilesize', 'assignsubmission_comprimg');
             $mform->setDefault('assignsubmission_comprimg_noforce', $defaultnoforce);
             $mform->hideIf('assignsubmission_comprimg_noforce', 'assignsubmission_comprimg_enabled', 'notchecked');
         }
@@ -199,10 +198,6 @@ class assign_submission_comprimg extends assign_submission_plugin {
     public function get_form_elements($submission, MoodleQuickForm $mform, stdClass $data) {
         global $OUTPUT;
 
-        if ($this->get_config('maxfilesubmissions') <= 0) {
-            return false;
-        }
-
         $fileoptions = $this->get_file_options();
 
         $submissionid = $submission ? $submission->id : 0;
@@ -217,8 +212,7 @@ class assign_submission_comprimg extends assign_submission_plugin {
         $mform->addElement('filemanager', 'files_filemanager', $this->get_name(), null, $fileoptions);
 
         // Student override.
-        // TODO: Hide until teacher allows.
-        if (true) {
+        if ($this->get_config('noforce') == 1) {
             $mform->addElement('advcheckbox', 'studentoverride', '', get_string('studentoverride', 'assignsubmission_comprimg'));
         }
     }
@@ -297,23 +291,25 @@ class assign_submission_comprimg extends assign_submission_plugin {
         $steps = 1; // How many compressiongrades do we degrade with every try?
         $newwidth = $maxwidth;
         $newheight = $maxheight;
-        $keepaspectratio=true;
+        $keepaspectratio = true;
 
         // Override compression stuff if student chooses to.
-        if ($data->studentoverride) {
+        if (isset($data->studentoverride) AND $data->studentoverride) {
             return true;
         }
+        
+        $prefixscaled = get_string('$prefixscaled', 'assignsubmission_comprimg'); //'zugeschnitten_';
+        $prefixcomp = get_string('$prefixcomp', 'assignsubmission_comprimg');
 
         foreach ($files as $file) {
             
             $filename = $file->get_filename();
-            // https://stackoverflow.com/questions/24872013/php-compress-image-to-meet-file-size-limit
-        
+    
             // Correct width and height first, according to the settings.
             if (isset($maxwidth) OR isset($maxheight)) {
                 $file_record = array('contextid'=>$file->get_contextid(), 'component'=>$file->get_component(), 'filearea'=>$file->get_filearea(),
                     'itemid'=>$file->get_itemid(), 'filepath'=>$file->get_filepath(),
-                    'filename'=>'zugeschnitten_'.$filename, 'userid'=>$file->get_userid());
+                    'filename'=>$prefixscaled.$filename, 'userid'=>$file->get_userid());
 
                 try {
                     $newfile = $fs->convert_image($file_record, $file, $newwidth, $newheight, $keepaspectratio, null);
@@ -331,7 +327,7 @@ class assign_submission_comprimg extends assign_submission_plugin {
             while ($file->get_filesize() > $maxfilesize) {
                 $file_record = array('contextid'=>$file->get_contextid(), 'component'=>$file->get_component(), 'filearea'=>$file->get_filearea(),
                     'itemid'=>$file->get_itemid(), 'filepath'=>$file->get_filepath(),
-                    'filename'=>'komprimiert_'.$compressiongrade.'_'.$filename, 'userid'=>$file->get_userid());
+                    'filename'=>$prefixcomp.$compressiongrade.'_'.$filename, 'userid'=>$file->get_userid());
 
                 try {
                     // Try to fix them by autocompression and replacing them.
@@ -378,7 +374,6 @@ class assign_submission_comprimg extends assign_submission_plugin {
             $params['anonymous'] = 1;
         }
         $event = \assignsubmission_comprimg\event\assessable_uploaded::create($params);
-        $event->set_legacy_files($files);
         $event->trigger();
 
         $groupname = null;

@@ -45,6 +45,10 @@ $string['maxfilesize_help'] = 'Größere Bilder werden automatisch komprimiert.'
 $string['forcemaxfilesize'] = 'Maximale Dateigröße erzwingen';
 $string['forcemaxfilesize_help'] = 'Wenn markiert können Lehrende die maximale Dateigröße nicht ändern.';
 $string['studentoverride'] = 'Ich möchte die Datei hochladen obwohl sie nicht den Vorgaben entspricht.';
+$string['noforce'] = "Vorgaben nicht erzwingen";
+$string['noforce_postfix'] = 'Lernende können Abgaben die nicht den Vorgaben entsprechen hochladen.';
+$string['prefixscaled'] = "skaliert_";
+$string['prefixcomp'] = "komprimiert_";
 
 // Privacy API
 $string['privacy:metadata:comprimgpurpose'] = 'Bilder die für Abgaben hochgeladen und komprimiert wurden.';

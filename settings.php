@@ -52,8 +52,11 @@ $settings->add(new admin_setting_configcheckbox('assignsubmission_comprimg/force
 $name = new lang_string('maxfilesize', 'assignsubmission_comprimg');
 $description = new lang_string('maxfilesize_help', 'assignsubmission_comprimg');
 
-$element = new admin_setting_configtext('assignsubmission_comprimg/maxfilesize',
-                $name, $description, 2, PARAM_INT);
+$element = new admin_setting_configselect('assignsubmission_comprimg/maxfilesize',
+                                          $name,
+                                          $description,
+                                          $CFG->maxbytes,
+                                          get_max_upload_sizes($CFG->maxbytes));
 $settings->add($element);
 
 // Allow teachers to overrule maxfilesize.
