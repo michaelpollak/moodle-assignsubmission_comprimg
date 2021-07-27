@@ -49,6 +49,10 @@ $string['noforce'] = "Don't force requirements";
 $string['noforce_postfix'] = 'Students are allowed to overrule the requirements.';
 $string['prefixscaled'] = "scaled_";
 $string['prefixcomp'] = "compressed_";
+$string['constraints'] = 'Constraints';
+$string['constraintdetails'] = 'Please upload images that fit the following constraints. 
+    We will try to compress them automatically if they don\'t match.
+    <br>Width: {$a->maxwidth} px<br>Height: {$a->maxheight} px<br>Filesize: {$a->maxfilesize}';
 
 // Privacy API
 $string['privacy:metadata:comprimgpurpose'] = 'The images uploaded for this assignment submission';

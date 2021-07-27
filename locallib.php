@@ -202,6 +202,30 @@ class assign_submission_comprimg extends assign_submission_plugin {
 
         $submissionid = $submission ? $submission->id : 0;
 
+        $adminconf = get_config('assignsubmission_comprimg');
+        $teacherconf = $this->get_config();
+        
+        $maxfilesize = $adminconf->maxfilesize;
+        if (!$adminconf->forcemaxfilesize AND isset($teacherconf->maxfilesize)) {
+            $maxfilesize = $teacherconf->maxfilesize;
+        }
+        
+        $maxwidth = $adminconf->maxwidth;
+        if (!$adminconf->forcemaxwidth AND isset($teacherconf->maxwidth)) {
+            $maxwidth = $teacherconf->maxwidth;
+        }
+
+        $maxheight = $adminconf->maxheight;
+        if (!$adminconf->forcemaxheight AND isset($teacherconf->maxheight)) {
+            $maxheight = $teacherconf->maxheight;
+        }
+        
+        // Show the information about compression to the students.
+        $humanreadable = display_size($maxfilesize);
+        $constr = ['maxwidth' => $maxwidth, 'maxheight' => $maxheight, 'maxfilesize' => $humanreadable];
+        $mform->addElement('static', 'constraints', get_string('constraints', 'assignsubmission_comprimg'), 
+            get_string('constraintdetails', 'assignsubmission_comprimg', $constr));
+        
         $data = file_prepare_standard_filemanager($data,
                                                   'files',
                                                   $fileoptions,

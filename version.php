@@ -25,6 +25,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2021062601;
+$plugin->version   = 2021062602;
 $plugin->requires  = 2020061500;
 $plugin->component = 'assignsubmission_comprimg';

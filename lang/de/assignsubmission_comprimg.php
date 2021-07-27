@@ -49,6 +49,10 @@ $string['noforce'] = "Vorgaben nicht erzwingen";
 $string['noforce_postfix'] = 'Lernende können Abgaben die nicht den Vorgaben entsprechen hochladen.';
 $string['prefixscaled'] = "skaliert_";
 $string['prefixcomp'] = "komprimiert_";
+$string['constraints'] = 'Einschränkungen';
+$string['constraintdetails'] = 'Bitte laden Sie Bilder innerhalb der folgenden Einschränkungen hoch. 
+    Größere Dateien werden automatisch komprimiert.
+    <br>Breite: {$a->maxwidth} px<br>Höhe: {$a->maxheight} px<br>Dateigröße: {$a->maxfilesize}';
 
 // Privacy API
 $string['privacy:metadata:comprimgpurpose'] = 'Bilder die für Abgaben hochgeladen und komprimiert wurden.';

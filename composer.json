@@ -1,0 +1,20 @@
+{
+    "name": "michaelpollak/moodle-assignsubmission_comprimg",
+    "description": "Moodle Plugin that allows teachers to add compression to the image files uploaded by students.",
+    "type": "moodle-assignsubmission",
+    "license": "GPL-3.0-or-later",
+    "require": {
+        "composer/installers": "~1.0"
+    },
+    "authors": [
+        {
+            "name": "Michael Pollak",
+            "email": "moodle@michaelpollak.org",
+            "homepage": "https://michaelpollak.org",
+            "role": "Developer"
+        }
+    ],
+    "extra": {
+        "installer-name": "comprimg"
+    }
+}
