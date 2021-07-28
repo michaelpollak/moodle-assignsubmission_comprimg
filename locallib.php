@@ -161,26 +161,11 @@ class assign_submission_comprimg extends assign_submission_plugin {
         // If set, set teachers default.
         
         // NOTE: Filepicker ignores maxbytes when used with admin rights.
-        $maxfilesize = 0;
-        
-        $adminconfig = get_config('assignsubmission_comprimg');
-
-        // If admin allows for teachers to overwrite look for teachers.
-        if (!$adminconfig->forcemaxfilesize) {
-
-            // If teachers allow students to override set to moodle max.
-            if ($this->get_config('noforce') == 1) {
-                $maxfilesize = get_max_upload_file_size();
-            } else {
-                $maxfilesize = $this->get_config('maxfilesize');
-            }
-        } else {
-            $maxfilesize = $adminconfig->maxfilesize;
-        }
+        $maxfilesize = get_max_upload_file_size();
 
         $fileoptions = array('subdirs' => 1,
                                 'maxbytes' => $maxfilesize,
-                                'maxfiles' => 1,
+                                'maxfiles' => 10,
                                 'accepted_types' => $this->get_configured_typesets(),
                                 'return_types' => (FILE_INTERNAL | FILE_CONTROLLED_LINK));
         
