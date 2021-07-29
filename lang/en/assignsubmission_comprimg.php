@@ -22,14 +22,14 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Compressed Images';
+$string['pluginname'] = 'Compressed File Upload';
 $string['default'] = 'Enabled by default';
 $string['default_help'] = 'If set, this submission method will be enabled by default for all new assignments.';
-$string['comprimg'] = 'Compressed Images';
-$string['enabled'] = 'Compressed Images';
-$string['enabled_help'] = 'If enabled, students are able to upload and automatically compress images for their submission.';
-$string['comprimgforlog'] = 'An image has been uploaded and was compressed.';
-$string['eventassessableuploaded'] = 'An image has been uploaded and was compressed.';
+$string['comprimg'] = 'Compressed File Upload';
+$string['enabled'] = 'Compressed File Upload';
+$string['enabled_help'] = 'If enabled, students are able to upload files and automatically compress images for their submission.';
+$string['comprimgforlog'] = 'Files have been uploaded and compressed.';
+$string['eventassessableuploaded'] = 'Files have been uploaded and compressed.';
 $string['siteuploadlimit'] = 'Site upload limit';
 
 $string['maxwidth'] = 'Maximum width of image';
@@ -53,11 +53,18 @@ $string['constraints'] = 'Constraints';
 $string['constraintdetails'] = 'Please upload images that fit the following constraints. 
     We will try to compress them automatically if they don\'t match.
     <br>Width: {$a->maxwidth} px<br>Height: {$a->maxheight} px<br>Filesize: {$a->maxfilesize}';
+$string['acceptedfiletypes'] = 'Accepted file types';
+$string['acceptedfiletypes_help'] = 'Accepted file types can be restricted by entering a list of file extensions. 
+    If the field is left empty, then all file types are allowed.';
+$string['maxfiles'] = 'Maximum files per submission';
+$string['maxfiles_help'] = 'If file submissions are enabled, each assignment can be set to accept up to this number of files for their submission.';
+$string['maxbytes'] = 'Maximum submission size';
+$string['maxbytes_help'] = 'Files uploaded by students may be combined of up to this size.';
 
 // Privacy API
-$string['privacy:metadata:comprimgpurpose'] = 'The images uploaded for this assignment submission';
+$string['privacy:metadata:comprimgpurpose'] = 'The files uploaded for this assignment submission';
 
 $string['errorwidthheight'] = 'Sorry, we couldn\'t resize your uploaded image.';
-$string['errormaxsize'] = 'Sorry, your image is still too big after compression.';
+$string['errormaxsize'] = 'Sorry, your image is still too big after compression. 
+    Your file is {$a->filesize} but the maximum filesize is {$a->maxfilesize}.';
 $string['errorcompression'] = 'Sorry, we couldn\'t compress your image.';
-

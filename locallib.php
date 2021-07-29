@@ -77,47 +77,84 @@ class assign_submission_comprimg extends assign_submission_plugin {
             $defaultmaxwidth = $this->get_config('maxwidth');
             $defaultmaxfilesize = $this->get_config('maxfilesize');
             $defaultnoforce = $this->get_config('noforce');
+            $defaultfiletypes = $this->get_config('filetypes');
+            $defaultmaxfiles = $this->get_config('maxfiles');
+            $defaultmaxbytes = $this->get_config('maxbytes');
         } else {
             $defaultmaxheight = $adminconf->maxheight;
             $defaultmaxwidth = $adminconf->maxwidth;
             $defaultmaxfilesize = $adminconf->maxfilesize;
             $defaultnoforce = 0;
+            $defaultfiletypes = $adminconf->filetypes;
+            $defaultmaxfiles = get_config('assignsubmission_comprimg', 'maxfiles');
+            $defaultmaxbytes = get_config('assignsubmission_comprimg', 'maxbytes');
         }
 
-        // If teachers are allowed to change maxwidth, show UI.
-        if(!$adminconf->forcemaxwidth) {
-            $mform->addElement('text', 'assignsubmission_comprimg_maxwidth', get_string('maxwidth', 'assignsubmission_comprimg'));
-            $mform->setType('assignsubmission_comprimg_maxwidth', PARAM_INT);
-            $mform->setDefault('assignsubmission_comprimg_maxwidth', $defaultmaxwidth);
-            $mform->addHelpButton('assignsubmission_comprimg_maxwidth', 'maxwidth', 'assignsubmission_comprimg');
-            $mform->hideIf('assignsubmission_comprimg_maxwidth', 'assignsubmission_comprimg_enabled', 'notchecked');
-        }
-                
-        // If teachers are allowed to change maxheight, show UI.
-        if(!$adminconf->forcemaxheight) {
-            $mform->addElement('text', 'assignsubmission_comprimg_maxheight', get_string('maxheight', 'assignsubmission_comprimg'));
-            $mform->setType('assignsubmission_comprimg_maxheight', PARAM_INT);
-            $mform->setDefault('assignsubmission_comprimg_maxheight', $defaultmaxheight);
-            $mform->addHelpButton('assignsubmission_comprimg_maxheight', 'maxheight', 'assignsubmission_comprimg');
-            $mform->hideIf('assignsubmission_comprimg_maxheight', 'assignsubmission_comprimg_enabled', 'notchecked');
+        // Added a div to allow easy css templating.
+        $mform->addElement('html', '<div id="comprimg">');
+        
+        $mform->addElement('text', 'assignsubmission_comprimg_maxwidth', get_string('maxwidth', 'assignsubmission_comprimg'));
+        $mform->setType('assignsubmission_comprimg_maxwidth', PARAM_INT);
+        $mform->setDefault('assignsubmission_comprimg_maxwidth', $defaultmaxwidth);
+        $mform->addHelpButton('assignsubmission_comprimg_maxwidth', 'maxwidth', 'assignsubmission_comprimg');
+        $mform->hideIf('assignsubmission_comprimg_maxwidth', 'assignsubmission_comprimg_enabled', 'notchecked');
+        // If teachers are not allowed to change maxwidth, disable UI.
+        if($adminconf->forcemaxwidth) {
+            $mform->disabledIf('assignsubmission_comprimg_maxwidth', 'assignsubmission_comprimg_enabled', 'checked');
         }
 
-        // If teachers are allowed to change maxfilesize, show UI.
-        if(!$adminconf->forcemaxfilesize) {
-            $choices = get_max_upload_sizes($CFG->maxbytes, $COURSE->maxbytes);
-            $mform->addElement('select', 'assignsubmission_comprimg_maxfilesize', get_string('maxfilesize', 'assignsubmission_comprimg'), $choices);
-            $mform->addHelpButton('assignsubmission_comprimg_maxfilesize', 'maxfilesize', 'assignsubmission_comprimg');
-            $mform->setDefault('assignsubmission_comprimg_maxfilesize', $defaultmaxfilesize);
-            $mform->hideIf('assignsubmission_comprimg_maxfilesize', 'assignsubmission_comprimg_enabled', 'notchecked');                   
+        $mform->addElement('text', 'assignsubmission_comprimg_maxheight', get_string('maxheight', 'assignsubmission_comprimg'));
+        $mform->setType('assignsubmission_comprimg_maxheight', PARAM_INT);
+        $mform->setDefault('assignsubmission_comprimg_maxheight', $defaultmaxheight);
+        $mform->addHelpButton('assignsubmission_comprimg_maxheight', 'maxheight', 'assignsubmission_comprimg');
+        $mform->hideIf('assignsubmission_comprimg_maxheight', 'assignsubmission_comprimg_enabled', 'notchecked');
+        // If teachers are not allowed to change maxheight, disable UI.
+        if($adminconf->forcemaxheight) {
+            $mform->disabledIf('assignsubmission_comprimg_maxheight', 'assignsubmission_comprimg_enabled', 'checked');
+        }
+
+        $filesizes = array(1048576 => '1MB', 2097152 => '2MB', 5242880 => '5MB');
+        $mform->addElement('select', 'assignsubmission_comprimg_maxfilesize', get_string('maxfilesize', 'assignsubmission_comprimg'), $filesizes);
+        $mform->addHelpButton('assignsubmission_comprimg_maxfilesize', 'maxfilesize', 'assignsubmission_comprimg');
+        $mform->setDefault('assignsubmission_comprimg_maxfilesize', $defaultmaxfilesize);
+        $mform->hideIf('assignsubmission_comprimg_maxfilesize', 'assignsubmission_comprimg_enabled', 'notchecked');  
+        // If teachers are not allowed to change maxheight, disable UI.
+        if($adminconf->forcemaxfilesize) {
+            $mform->disabledIf('assignsubmission_comprimg_maxfilesize', 'assignsubmission_comprimg_enabled', 'checked');
         }
         
-        if(true) {
-            $mform->addElement('advcheckbox', 'assignsubmission_comprimg_noforce', get_string('noforce', 'assignsubmission_comprimg'), get_string('noforce_postfix', 'assignsubmission_comprimg'));
-            $mform->setType('assignsubmission_comprimg_noforce', PARAM_INT);
-            $mform->setDefault('assignsubmission_comprimg_noforce', $defaultnoforce);
-            $mform->hideIf('assignsubmission_comprimg_noforce', 'assignsubmission_comprimg_enabled', 'notchecked');
+        $mform->addElement('advcheckbox', 'assignsubmission_comprimg_noforce', get_string('noforce', 'assignsubmission_comprimg'), get_string('noforce_postfix', 'assignsubmission_comprimg'));
+        $mform->setType('assignsubmission_comprimg_noforce', PARAM_INT);
+        $mform->setDefault('assignsubmission_comprimg_noforce', $defaultnoforce);
+        $mform->hideIf('assignsubmission_comprimg_noforce', 'assignsubmission_comprimg_enabled', 'notchecked');
+
+        // Maximum submission size over all files.
+        $choices = get_max_upload_sizes($CFG->maxbytes, $COURSE->maxbytes, get_config('assignsubmission_comprimg', 'maxbytes'));
+        $name = get_string('maxbytes', 'assignsubmission_comprimg');
+        $mform->addElement('select', 'assignsubmission_comprimg_maxbytes', $name, $choices);
+        $mform->addHelpButton('assignsubmission_comprimg_maxbytes', 'maxbytes', 'assignsubmission_comprimg');
+        $mform->setDefault('assignsubmission_comprimg_maxbytes', $defaultmaxbytes);
+        $mform->hideIf('assignsubmission_comprimg_maxbytes', 'assignsubmission_comprimg_enabled', 'notchecked');
+        
+        // Maximum number of uploaded files.
+        $options = array();
+        for ($i = 1; $i <= get_config('assignsubmission_comprimg', 'maxfiles'); $i++) {
+            $options[$i] = $i;
         }
+        $name = get_string('maxfiles', 'assignsubmission_comprimg');
+        $mform->addElement('select', 'assignsubmission_comprimg_maxfiles', $name, $options);
+        $mform->addHelpButton('assignsubmission_comprimg_maxfiles', 'maxfiles', 'assignsubmission_comprimg');
+        $mform->setDefault('assignsubmission_comprimg_maxfiles', $defaultmaxfiles);
+        $mform->hideIf('assignsubmission_comprimg_maxfiles', 'assignsubmission_comprimg_enabled', 'notchecked');
+        
+        // Accepted file types.
+        $name = get_string('acceptedfiletypes', 'assignsubmission_comprimg');
+        $mform->addElement('filetypes', 'assignsubmission_comprimg_filetypes', $name);
+        $mform->addHelpButton('assignsubmission_comprimg_filetypes', 'acceptedfiletypes', 'assignsubmission_comprimg');
+        $mform->setDefault('assignsubmission_comprimg_filetypes', $defaultfiletypes);
+        $mform->hideIf('assignsubmission_comprimg_filetypes', 'assignsubmission_comprimg_enabled', 'notchecked');
     
+        $mform->addElement('html', '</div>');
     }
 
     /**
@@ -143,6 +180,18 @@ class assign_submission_comprimg extends assign_submission_plugin {
         if (isset($data->assignsubmission_comprimg_noforce)) {
             $this->set_config('noforce', $data->assignsubmission_comprimg_noforce);
         }
+
+        if (isset($data->assignsubmission_comprimg_filetypes)) {
+            $this->set_config('filetypes', $data->assignsubmission_comprimg_filetypes);
+        }
+        
+        if (isset($data->assignsubmission_comprimg_maxfiles)) {
+            $this->set_config('maxfiles', $data->assignsubmission_comprimg_maxfiles);
+        }
+        
+        if (isset($data->assignsubmission_comprimg_maxbytes)) {
+            $this->set_config('maxbytes', $data->assignsubmission_comprimg_maxbytes);
+        }
         
         return true;
     }
@@ -154,18 +203,15 @@ class assign_submission_comprimg extends assign_submission_plugin {
      */
     private function get_file_options() {
         
-        
-        // Add our new checks here.
-        // Set global default
-        // If set, set instance default by admin
-        // If set, set teachers default.
-        
         // NOTE: Filepicker ignores maxbytes when used with admin rights.
-        $maxfilesize = get_max_upload_file_size();
+        $maxbytes = $this->get_config('maxbytes');
+        if ($maxbytes == 0) {
+            $maxbytes = get_config('assignsubmission_comprimg', 'maxbytes');
+        }
 
         $fileoptions = array('subdirs' => 1,
-                                'maxbytes' => $maxfilesize,
-                                'maxfiles' => 10,
+                                'maxbytes' => $maxbytes,
+                                'maxfiles' => $this->get_config('maxfiles'),
                                 'accepted_types' => $this->get_configured_typesets(),
                                 'return_types' => (FILE_INTERNAL | FILE_CONTROLLED_LINK));
         
@@ -298,20 +344,20 @@ class assign_submission_comprimg extends assign_submission_plugin {
         }
         
         $steps = 1; // How many compressiongrades do we degrade with every try?
-        $newwidth = $maxwidth;
-        $newheight = $maxheight;
         $keepaspectratio = true;
-
-        // Override compression stuff if student chooses to.
-        if (isset($data->studentoverride) AND $data->studentoverride) {
-            return true;
-        }
         
         $prefixscaled = get_string('prefixscaled', 'assignsubmission_comprimg'); //'zugeschnitten_';
         $prefixcomp = get_string('prefixcomp', 'assignsubmission_comprimg');
 
         foreach ($files as $file) {
             
+            // Default if we see no image, break this loop and look at next.
+            $compressable = array('image/jpeg', 'image/png', 'image/gif');
+            if (!in_array ($file->get_mimetype(), $compressable)) {
+                continue;
+            }
+            
+            // Compress if we see image.
             $filename = $file->get_filename();
     
             // Correct width and height first, according to the settings.
@@ -321,7 +367,7 @@ class assign_submission_comprimg extends assign_submission_plugin {
                     'filename'=>$prefixscaled.$filename, 'userid'=>$file->get_userid());
 
                 try {
-                    $newfile = $fs->convert_image($file_record, $file, $newwidth, $newheight, $keepaspectratio, null);
+                    $newfile = $fs->convert_image($file_record, $file, $maxwidth, $maxheight, $keepaspectratio, null);
                     $file->delete();
                     $file = $newfile;
                 } catch (Exception $e) {
@@ -357,9 +403,15 @@ class assign_submission_comprimg extends assign_submission_plugin {
                 
             }
 
+            // Skip to next file and don't evaluate if studentoverride.
+            if (isset($data->studentoverride) AND $data->studentoverride) {
+                continue;
+            }
+
             // Return feedback after final tries were not successful.
             if ($newfile->get_filesize() > $maxfilesize) {
-                $this->set_error(get_string('errormaxsize', 'assignsubmission_comprimg'));
+                $filedetails = array('filesize' => display_size($newfile->get_filesize()), 'maxfilesize' => display_size($maxfilesize));
+                $this->set_error(get_string('errormaxsize', 'assignsubmission_comprimg', $filedetails));
                 return false;
             }  
 
@@ -654,7 +706,7 @@ class assign_submission_comprimg extends assign_submission_plugin {
      * @return array('groupname', 'mime/type', ...)
      */
     private function get_configured_typesets() {
-        $typeslist = 'optimised_image';
+        $typeslist = (string)$this->get_config('filetypes');
 
         $util = new \core_form\filetypes_util();
         $sets = $util->normalize_file_types($typeslist);

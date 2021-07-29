@@ -22,14 +22,14 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Komprimierte Bilder';
+$string['pluginname'] = 'Komprimierter Dateiupload';
 $string['default'] = 'Standardmäßig aktiviert';
 $string['default_help'] = 'Wenn markiert werden alle zukünftigen Aufgaben komprimierte Bilder erlauben.';
-$string['comprimg'] = 'Komprimierte Bilder';
-$string['enabled'] = 'Komprimierte Bilder';
+$string['comprimg'] = 'Komprimierter Dateiupload';
+$string['enabled'] = 'Komprimierter Dateiupload';
 $string['enabled_help'] = 'Wenn markiert können Lernende Bilder hochladen die automatisiert komprimiert werden.';
-$string['comprimgforlog'] = 'Ein Bild wurde hochgeladen und komprimiert.';
-$string['eventassessableuploaded'] = 'Ein Bild wurde hochgeladen und komprimiert.';
+$string['comprimgforlog'] = 'Dateien wurden hochgeladen und komprimiert.';
+$string['eventassessableuploaded'] = 'Dateien wurden hochgeladen und komprimiert.';
 $string['siteuploadlimit'] = 'Größenbeschränkung';
 
 $string['maxwidth'] = 'Maximale Breite des Bildes';
@@ -53,10 +53,17 @@ $string['constraints'] = 'Einschränkungen';
 $string['constraintdetails'] = 'Bitte laden Sie Bilder innerhalb der folgenden Einschränkungen hoch. 
     Größere Dateien werden automatisch komprimiert.
     <br>Breite: {$a->maxwidth} px<br>Höhe: {$a->maxheight} px<br>Dateigröße: {$a->maxfilesize}';
+$string['acceptedfiletypes'] = 'Akzeptierte Dateitypen';
+$string['acceptedfiletypes_help'] = 'Die erlaubten Dateitypen können eingeschränkt werden.';
+$string['maxfiles'] = 'Maximale Dateianzahl pro Abgabe';
+$string['maxfiles_help'] = 'Es können maximal diese Anzahl an Dateien hochgeladen werden.';
+$string['maxbytes'] = 'Maximale Dateigröße';
+$string['maxbytes_help'] = 'Alle hochgeladenen Dateien dürfen maximal diese Dateigröße erreichen.';
 
 // Privacy API
-$string['privacy:metadata:comprimgpurpose'] = 'Bilder die für Abgaben hochgeladen und komprimiert wurden.';
+$string['privacy:metadata:comprimgpurpose'] = 'Dateien die für Abgaben hochgeladen und komprimiert wurden.';
 
 $string['errorwidthheight'] = 'Sorry, wir konnten dein Bild leider nicht zuschneiden.';
-$string['errormaxsize'] = 'Sorry, trotz Komprimierung ist dein Bild zu groß.';
+$string['errormaxsize'] = 'Sorry, trotz Komprimierung ist dein Bild zu groß. 
+    Deine Datei ist {$a->filesize} wobei maximal {$a->maxfilesize} erlaubt ist.';
 $string['errorcompression'] = 'Sorry, wir konnten dein Bild leider nicht komprimieren.';
