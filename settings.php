@@ -52,7 +52,7 @@ $settings->add(new admin_setting_configcheckbox('assignsubmission_comprimg/force
 $name = new lang_string('maxfilesize', 'assignsubmission_comprimg');
 $description = new lang_string('maxfilesize_help', 'assignsubmission_comprimg');
 
-$choices = array(1048576 => '1MB', 2097152 => '2MB', 5242880 => '5MB');
+$choices = array(209716 => '200kB', 524288 => '500kB', 1048576 => '1MB', 2097152 => '2MB', 5242880 => '5MB');
 $element = new admin_setting_configselect('assignsubmission_comprimg/maxfilesize',
                                           $name,
                                           $description,

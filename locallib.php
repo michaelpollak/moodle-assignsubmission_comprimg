@@ -113,7 +113,7 @@ class assign_submission_comprimg extends assign_submission_plugin {
             $mform->disabledIf('assignsubmission_comprimg_maxheight', 'assignsubmission_comprimg_enabled', 'checked');
         }
 
-        $filesizes = array(1048576 => '1MB', 2097152 => '2MB', 5242880 => '5MB');
+        $filesizes = array(209716 => '200kB', 524288 => '500kB', 1048576 => '1MB', 2097152 => '2MB', 5242880 => '5MB');
         $mform->addElement('select', 'assignsubmission_comprimg_maxfilesize', get_string('maxfilesize', 'assignsubmission_comprimg'), $filesizes);
         $mform->addHelpButton('assignsubmission_comprimg_maxfilesize', 'maxfilesize', 'assignsubmission_comprimg');
         $mform->setDefault('assignsubmission_comprimg_maxfilesize', $defaultmaxfilesize);
