@@ -258,13 +258,13 @@ class assign_submission_comprimg extends assign_submission_plugin {
             get_string('constraintdetails', 'assignsubmission_comprimg', $constr));
         
         $data = file_prepare_standard_filemanager($data,
-                                                  'files',
+                                                  'comprfiles',
                                                   $fileoptions,
                                                   $this->assignment->get_context(),
                                                   'assignsubmission_comprimg',
                                                   assignsubmission_comprimg_FILEAREA,
                                                   $submissionid);
-        $mform->addElement('filemanager', 'files_filemanager', $this->get_name(), null, $fileoptions);
+        $mform->addElement('filemanager', 'comprfiles_filemanager', $this->get_name(), null, $fileoptions);
 
         // Student override.
         if ($this->get_config('noforce') == 1) {
@@ -305,7 +305,7 @@ class assign_submission_comprimg extends assign_submission_plugin {
         $fileoptions = $this->get_file_options();
 
         $data = file_postupdate_standard_filemanager($data,
-                                                     'files',
+                                                     'comprfiles',
                                                      $fileoptions,
                                                      $this->assignment->get_context(),
                                                      'assignsubmission_comprimg',
@@ -687,7 +687,7 @@ class assign_submission_comprimg extends assign_submission_plugin {
      */
     public function get_external_parameters() {
         return array(
-            'files_filemanager' => new external_value(
+            'comprfiles_filemanager' => new external_value(
                 PARAM_INT,
                 'The id of a draft area containing files for this submission.',
                 VALUE_OPTIONAL
