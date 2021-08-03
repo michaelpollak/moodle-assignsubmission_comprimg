@@ -350,18 +350,32 @@ class assign_submission_comprimg extends assign_submission_plugin {
         $prefixcomp = get_string('prefixcomp', 'assignsubmission_comprimg');
 
         foreach ($files as $file) {
+            $imageinfo = $file->get_imageinfo();
             
             // Default if we see no image, break this loop and look at next.
             $compressable = array('image/jpeg', 'image/png', 'image/gif');
-            if (!in_array ($file->get_mimetype(), $compressable)) {
+            if (!in_array ($imageinfo['mimetype'], $compressable)) {
                 continue;
             }
             
-            // Compress if we see image.
             $filename = $file->get_filename();
-    
+            
+            // Ignore images that are already within width and height range.
+            $needswork = 0;
+            if (isset($maxwidth) AND $maxwidth > 0) {
+                if ($maxwidth < $imageinfo['width']) {
+                    $needswork = 1;
+                }
+            }
+            if ($needswork == 0 AND isset($maxheight) AND $maxheight > 0) {
+                if ($maxheight < $imageinfo['height']) {
+                    $needswork = 1;
+                }
+            }
+
             // Correct width and height first, according to the settings.
-            if (isset($maxwidth) OR isset($maxheight)) {
+            if ($needswork) {
+
                 $file_record = array('contextid'=>$file->get_contextid(), 'component'=>$file->get_component(), 'filearea'=>$file->get_filearea(),
                     'itemid'=>$file->get_itemid(), 'filepath'=>$file->get_filepath(),
                     'filename'=>$prefixscaled.$filename, 'userid'=>$file->get_userid());
@@ -397,7 +411,7 @@ class assign_submission_comprimg extends assign_submission_plugin {
                 }            
                 
                 $compressiongrade = $compressiongrade - $steps;
-                if ($compressiongrade <= 1) {
+                if ($compressiongrade < 1) {
                     break;
                 }
                 
@@ -409,7 +423,7 @@ class assign_submission_comprimg extends assign_submission_plugin {
             }
 
             // Return feedback after final tries were not successful.
-            if ($newfile->get_filesize() > $maxfilesize) {
+            if ($file->get_filesize() > $maxfilesize) {
                 $filedetails = array('filesize' => display_size($newfile->get_filesize()), 'maxfilesize' => display_size($maxfilesize));
                 $this->set_error(get_string('errormaxsize', 'assignsubmission_comprimg', $filedetails));
                 return false;
