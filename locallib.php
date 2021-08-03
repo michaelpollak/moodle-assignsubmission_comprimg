@@ -634,7 +634,7 @@ class assign_submission_comprimg extends assign_submission_plugin {
         $files = $fs->get_area_files(context_user::instance($USER->id)->id,
                                      'user',
                                      'draft',
-                                     $data->files_filemanager,
+                                     $data->comprfiles_filemanager,
                                      'id',
                                      false);
         return count($files) == 0;
