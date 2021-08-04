@@ -24,7 +24,7 @@
 
 $string['pluginname'] = 'Komprimierter Dateiupload/Skalierte und komprimierte Bilder';
 $string['default'] = 'Standardmäßig aktiviert';
-$string['default_help'] = 'Wenn markiert werden alle zukünftigen angelegten Aufgaben \'automatische akalierte und komprimierte Bilder\' als Abgabetyp anbieten.';
+$string['default_help'] = 'Wenn markiert werden alle zukünftigen angelegten Aufgaben \'automatisch skalierte und komprimierte Bilder\' als Abgabetyp anbieten.';
 $string['comprimg'] = 'Dateiabgabe<br>- mit Skalierung und Kompression von Bildern<br>- andere Dateitypen bleiben unverändert';
 $string['enabled'] = 'Dateiabgabe mit automatischer Bilderskalierung und -komprimierung';
 $string['enabled_help'] = 'Wenn markiert können Lernende Bilder hochladen die automatisiert auf vorgegebene Maximalwerte für Breite bzw. Höhe skaliert sowie auf eine maximale Dateigröße komprimiert werden.';
@@ -40,7 +40,7 @@ $string['maxheight'] = 'max. Höhe bei Bildern (in Pixel)';
 $string['maxheight_help'] = 'Höhere Bilder werden automatisch auf diese Höhe skaliert.';
 $string['forcemaxheight'] = 'max. Höhe erzwingen';
 $string['forcemaxheight_help'] = 'Wenn markiert können Lehrende die maximale Höhe nicht ändern.';
-$string['maxfilesize'] = 'max. Dateigröße bei Bildern (in MB)';
+$string['maxfilesize'] = 'max. Dateigröße der Bilder nach Verkleinerung (in MB)';
 $string['maxfilesize_help'] = 'Bilder mit größerer Dateigröße werden automatisch skaliert bzw. komprimiert.';
 $string['forcemaxfilesize'] = 'max. Dateigröße erzwingen';
 $string['forcemaxfilesize_help'] = 'Wenn markiert können Lehrende die maximale Dateigröße nicht ändern.';
