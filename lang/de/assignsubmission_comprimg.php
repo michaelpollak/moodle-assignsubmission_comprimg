@@ -22,37 +22,39 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Komprimierter Dateiupload';
+$string['pluginname'] = 'Komprimierter Dateiupload/Skalierte und komprimierte Bilder';
 $string['default'] = 'Standardmäßig aktiviert';
-$string['default_help'] = 'Wenn markiert werden alle zukünftigen Aufgaben komprimierte Bilder erlauben.';
-$string['comprimg'] = 'Komprimierter Dateiupload';
-$string['enabled'] = 'Komprimierter Dateiupload';
-$string['enabled_help'] = 'Wenn markiert können Lernende Bilder hochladen die automatisiert komprimiert werden.';
-$string['comprimgforlog'] = 'Dateien wurden hochgeladen und komprimiert.';
-$string['eventassessableuploaded'] = 'Dateien wurden hochgeladen und komprimiert.';
-$string['siteuploadlimit'] = 'Größenbeschränkung';
+$string['default_help'] = 'Wenn markiert werden alle zukünftigen angelegten Aufgaben \'automatisch skalierte und komprimierte Bilder\' als Abgabetyp anbieten.';
+$string['comprimg'] = 'Dateiabgabe<br>- mit Skalierung und Kompression von Bildern<br>- andere Dateitypen bleiben unverändert';
+$string['enabled'] = 'Dateiabgabe mit automatischer Bilderskalierung und -komprimierung';
+$string['enabled_help'] = 'Wenn markiert können Lernende Bilder hochladen die automatisiert auf vorgegebene Maximalwerte für Breite bzw. Höhe skaliert sowie auf eine maximale Dateigröße komprimiert werden.';
+$string['comprimgforlog'] = 'Ein Bild wurde hochgeladen und gegebenenfalls skaliert und komprimiert.';
+$string['eventassessableuploaded'] = 'Hochladen sowie Skalierung (Größenanpassung) bzw. Komprimierrung (Datenmengenreduktion)';
+$string['siteuploadlimit'] = 'für dieses Moodle maximal erlaubte Dateigröße zum Hochladen';
 
-$string['maxwidth'] = 'Maximale Breite des Bildes';
+$string['maxwidth'] = 'max. Breite bei Bildern (in Pixel)';
 $string['maxwidth_help'] = 'Breitere Bilder werden automatisch auf das Format skaliert.';
-$string['forcemaxwidth'] = 'Maximale Breite erzwingen';
+$string['forcemaxwidth'] = 'max. Breite erzwingen';
 $string['forcemaxwidth_help'] = 'Wenn markiert können Lehrende die maximale Breite nicht ändern.';
-$string['maxheight'] = 'Maximale Höhe des Bildes';
-$string['maxheight_help'] = 'Höhere Bilder werden automatisch auf das Format skaliert.';
-$string['forcemaxheight'] = 'Maximale Höhe erzwingen';
+$string['maxheight'] = 'max. Höhe bei Bildern (in Pixel)';
+$string['maxheight_help'] = 'Höhere Bilder werden automatisch auf diese Höhe skaliert.';
+$string['forcemaxheight'] = 'max. Höhe erzwingen';
 $string['forcemaxheight_help'] = 'Wenn markiert können Lehrende die maximale Höhe nicht ändern.';
-$string['maxfilesize'] = 'Maximale Dateigröße des Bildes';
-$string['maxfilesize_help'] = 'Größere Bilder werden automatisch komprimiert.';
-$string['forcemaxfilesize'] = 'Maximale Dateigröße erzwingen';
+$string['maxfilesize'] = 'max. Dateigröße der Bilder nach Verkleinerung (in MB)';
+$string['maxfilesize_help'] = 'Bilder mit größerer Dateigröße werden automatisch skaliert bzw. komprimiert.';
+$string['forcemaxfilesize'] = 'max. Dateigröße erzwingen';
 $string['forcemaxfilesize_help'] = 'Wenn markiert können Lehrende die maximale Dateigröße nicht ändern.';
-$string['studentoverride'] = 'Ich möchte die Datei hochladen obwohl sie nicht den Vorgaben entspricht.';
+$string['studentoverride'] = 'Ich möchte die unskalierte und unkomprimierte Original-Datei hochladen obwohl sie nicht auf die den Vorgaben entspricht.';
 $string['noforce'] = "Vorgaben nicht erzwingen";
-$string['noforce_postfix'] = 'Lernende können Abgaben die nicht den Vorgaben entsprechen hochladen.';
+$string['noforce_postfix'] = 'Lernende können Abgaben die trotz Skalierung und Kompression nicht auf die vorgegebenen Grenzwerte reduziert werden konnten dennoch hochladen.';
 $string['prefixscaled'] = "skaliert_";
 $string['prefixcomp'] = "komprimiert_";
 $string['constraints'] = 'Einschränkungen';
-$string['constraintdetails'] = 'Bitte laden Sie Bilder innerhalb der folgenden Einschränkungen hoch. 
-    Größere Dateien werden automatisch komprimiert.
-    <br>Breite: {$a->maxwidth} px<br>Höhe: {$a->maxheight} px<br>Dateigröße: {$a->maxfilesize}';
+$string['constraintdetails'] = 'Hochgeladene Bilder werden gegebenenfalls auf die folgenden Maximalwerte verkleinert oder komprimiert (Datenmengenreduktion).
+<br>
+Bilder, die bereits unterhalb dieser Werte liegen werden unverändert hochgeladen.
+<br>Breite: {$a->maxwidth} px<br>Höhe: {$a->maxheight} px<br>Dateigröße: {$a->maxfilesize}<br><br>
+Andere erlaubte Dateitypen können ebenfalls abgegeben werden. Bei diesen erfolgt keine Skalierung oder Komprimierung.<br>';
 $string['acceptedfiletypes'] = 'Akzeptierte Dateitypen';
 $string['acceptedfiletypes_help'] = 'Die erlaubten Dateitypen können eingeschränkt werden.';
 $string['maxfiles'] = 'Maximale Dateianzahl pro Abgabe';
@@ -63,7 +65,7 @@ $string['maxbytes_help'] = 'Alle hochgeladenen Dateien dürfen maximal diese Dat
 // Privacy API
 $string['privacy:metadata:comprimgpurpose'] = 'Dateien die für Abgaben hochgeladen und komprimiert wurden.';
 
-$string['errorwidthheight'] = 'Sorry, wir konnten dein Bild leider nicht zuschneiden.';
-$string['errormaxsize'] = 'Sorry, trotz Komprimierung ist dein Bild zu groß. 
+$string['errorwidthheight'] = 'Das Bild konnte leider nicht skaliert werden.';
+$string['errormaxsize'] = 'Trotz Komprimierung ist das Bild größer als die vorgegebene Dateigröße.
     Deine Datei ist {$a->filesize} wobei maximal {$a->maxfilesize} erlaubt ist.';
-$string['errorcompression'] = 'Sorry, wir konnten dein Bild leider nicht komprimieren.';
+$string['errorcompression'] = 'Fehler bei der Komprimierung. Das Bild konnte leider nicht komprimiert werden.';
